@@ -13,9 +13,14 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+env:
+  PATH_TO_PROJECT: './myproject/src'
+  MY_NAME: Lincoln
+  VERSION: 5
+
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
+  # This workflow contains a single job called "hello_world"
   hello_world:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
@@ -34,3 +39,10 @@ jobs:
         run: |
           echo Add other actions to build,
           echo test, and deploy your project.
+      
+      - name: Access an environment variable from the workspace scope in this file
+        run: echo "name $MY_NAME, path $PATH_TO_PROJECT"
+
+      - name: Run only if version is OK and the previous step succeeded
+        if: success() && env.VERSION > 4
+        run: echo Version is OK
