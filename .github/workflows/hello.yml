@@ -46,3 +46,27 @@ jobs:
       - name: Run only if version is OK and the previous step succeeded
         if: success() && env.VERSION > 4
         run: echo Version is OK
+
+  # Add another job      
+  run_script_file:
+    name: Run a Python script that is in our repo
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ${{ env.PATH_TO_PROJECT }}
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10' 
+      # can add in code to discover things about the environment you're running in
+      - run: pwd
+      - run: which python
+      - run: which python3
+      - run: pip install Pillow
+      - run: python my_script.py 400 300 out.png
+      - name: Publish Artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: placeholder_image
+          path: ${{ env.PATH_TO_PROJECT }}/out.png
